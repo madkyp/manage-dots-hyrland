@@ -1,11 +1,33 @@
 # dotfiles
 
 Config de escritorio (Hyprland + [HyDE](https://github.com/HyDE-Project/HyDE)) para Arch/CachyOS,
-gestionada con `dots.py`. No hace falta instalar nada a mano: el script usa
-[`uv`](https://docs.astral.sh/uv/) para resolver sus propias dependencias (`rich`, `questionary`)
-la primera vez que se ejecuta.
+gestionada con `dots.py` (CLI) o `dots_gui.py` (interfaz grafica GTK4/libadwaita) — ambos
+comparten la misma logica en `dots_core.py`.
 
-## Instalar en una maquina nueva
+## Interfaz grafica (GTK4 + libadwaita)
+
+```bash
+git clone <url-de-este-repo> ~/dotfiles
+cd ~/dotfiles
+./gui.sh
+```
+
+`gui.sh` instala `python-gobject`, `gtk4` y `libadwaita` via pacman si faltan, y abre una
+ventana con dos pestañas:
+
+- **Exportar**: checklist de categorias (con tamaño y notas) → copia lo seleccionado a `files/`,
+  regenera `packages.toml`/`manifest.json` y ofrece hacer commit desde un toast.
+- **Instalar**: checklist de las categorias presentes en `packages.toml` → "Instalar paquetes"
+  abre una terminal (kitty/alacritty/xterm) con `sudo pacman` / `yay` para que introduzcas tu
+  contraseña con normalidad; "Crear symlinks" enlaza `files/<ruta>` → `$HOME/<ruta>` (sin sudo),
+  con backup automatico de lo que ya exista.
+
+Si ya tienes las dependencias GTK, tambien puedes lanzarla directo: `python3 dots_gui.py`.
+
+## Linea de comandos
+
+No hace falta instalar nada a mano: el script usa [`uv`](https://docs.astral.sh/uv/) para
+resolver sus propias dependencias (`rich`, `questionary`) la primera vez que se ejecuta.
 
 ```bash
 git clone <url-de-este-repo> ~/dotfiles
@@ -46,11 +68,14 @@ uv run dots.py list
 ## Estructura
 
 ```
-dots.py            programa (export / install / list)
-install.sh         bootstrap para una instalacion nueva
-packages.toml       paquetes pacman/AUR por categoria (generado)
-manifest.json       metadata del ultimo export (generado)
-files/              copia espejo de las rutas de $HOME versionadas
+dots_core.py        logica compartida (categorias, export, install, symlinks)
+dots.py              CLI (export / install / list) sobre dots_core
+dots_gui.py          GUI GTK4/libadwaita sobre dots_core
+install.sh           bootstrap CLI (instala uv si falta)
+gui.sh               bootstrap GUI (instala GTK4/libadwaita si falta)
+packages.toml        paquetes pacman/AUR por categoria (generado)
+manifest.json        metadata del ultimo export (generado)
+files/               copia espejo de las rutas de $HOME versionadas
 ```
 
 ## Notas importantes
