@@ -1,0 +1,101 @@
+# Generado por dots.py export. No edites a mano salvo que sepas lo que haces.
+# 'pacman' = paquetes de repos oficiales (o CachyOS). 'aur' = requieren yay/paru.
+
+[hypr]
+label = "Hyprland (core: hyprland/hypridle/hyprlock/hyprsunset)"
+pacman = ["hyprland", "hypridle", "hyprlock", "hyprsunset"]
+aur = []
+
+[waybar]
+label = "Waybar"
+pacman = ["waybar"]
+aur = []
+
+[rofi]
+label = "Rofi (launcher)"
+pacman = ["rofi"]
+aur = []
+# no detectados como instalados, verifica manualmente: rofi-wayland
+
+[dunst]
+label = "Dunst (notificaciones)"
+pacman = ["dunst"]
+aur = []
+
+[swaync]
+label = "SwayNC (centro de notificaciones)"
+pacman = ["swaync"]
+aur = []
+# no detectados como instalados, verifica manualmente: sw-notification-center
+
+[kitty]
+label = "Kitty (terminal)"
+pacman = ["kitty"]
+aur = []
+
+[ghostty]
+label = "Ghostty (terminal)"
+pacman = []
+aur = []
+# no detectados como instalados, verifica manualmente: ghostty
+
+[fish]
+label = "Fish (shell)"
+pacman = ["fish", "cachyos-fish-config"]
+aur = []
+
+[fastfetch]
+label = "Fastfetch"
+pacman = ["fastfetch"]
+aur = []
+
+[pypr]
+label = "Pyprland (pypr)"
+pacman = []
+aur = []
+# no detectados como instalados, verifica manualmente: pyprland
+
+[nwg-look]
+label = "nwg-look (tema GTK)"
+pacman = []
+aur = ["nwg-look"]
+
+[nwg-displays]
+label = "nwg-displays (monitores)"
+pacman = []
+aur = ["nwg-displays"]
+
+[gtk]
+label = "Temas GTK (config, no assets)"
+pacman = []
+aur = []
+note = "El tema GTK en si (iconos/gtk-4.0) se instala como paquete, no se copia."
+
+[qt-theming]
+label = "Qt theming (qt5ct/qt6ct/Kvantum)"
+pacman = ["qt5ct", "qt6ct"]
+aur = ["kvantum", "kvantum-qt5"]
+
+[skwd-wall]
+label = "skwd-wall (wallpaper switcher)"
+pacman = []
+aur = []
+note = "Herramienta personalizada: revisa manualmente de donde viene."
+
+[spicetify]
+label = "Spicetify (Spotify theming)"
+pacman = []
+aur = []
+# no detectados como instalados, verifica manualmente: spicetify-cli
+
+[hyde]
+label = "HyDE (config.toml + wallbash + definiciones de tema, SIN wallpapers)"
+pacman = []
+aur = []
+# no detectados como instalados, verifica manualmente: hyde-cli-git
+note = "Instala HyDE primero (https://github.com/HyDE-Project/HyDE) para tener el motor de temas."
+
+[shell-rc]
+label = "Dotfiles sueltos de shell (.zshrc, .bashrc, .xprofile, .Xresources...)"
+pacman = []
+aur = []
