@@ -20,17 +20,39 @@ import gi
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Adw, Gtk, GLib  # noqa: E402
+from gi.repository import Adw, Gtk, GLib, Gdk  # noqa: E402
 
 import dots_core as core  # noqa: E402
 
 APP_ID = "com.madkyp.dots"
+
+SWITCH_CSS = b"""
+switch:checked {
+  background-color: #2ec27e; /* verde: categoria activada */
+}
+switch:not(:checked) {
+  background-color: #e01b24; /* rojo: categoria desactivada */
+}
+"""
+
+INSTALL_TUTORIAL = (
+    "1. Marca abajo las categorias que quieras instalar en esta maquina.\n"
+    "2. Pulsa «Instalar paquetes»: se abre una terminal donde escribes tu contraseña de sudo "
+    "con normalidad (instala con pacman y, si hace falta, con yay/paru).\n"
+    "3. Pulsa «Crear symlinks»: enlaza los archivos de este repo dentro de tu $HOME. Si ya tenias "
+    "config previa, se mueve automaticamente a ~/.dotfiles-backup-AAAAMMDD-HHMMSS/, no se borra.\n"
+    "4. Reinicia la sesion de Hyprland (o recarga la config) para que todo surta efecto."
+)
 
 
 class DotsWindow(Adw.ApplicationWindow):
     def __init__(self, app: Adw.Application):
         super().__init__(application=app, title="Dotfiles Hyprland / HyDE",
                           default_width=880, default_height=720)
+        # Pide un minimo razonable: en un layout en mosaico (tiling) sin esto
+        # Hyprland puede asignar una ventana tan estrecha que los switches
+        # queden fuera del area visible.
+        self.set_size_request(640, 480)
 
         self.export_switches: dict[str, Adw.SwitchRow] = {}
         self.install_switches: dict[str, Adw.SwitchRow] = {}
@@ -139,6 +161,11 @@ class DotsWindow(Adw.ApplicationWindow):
             return
 
         content = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
+        tutorial = Adw.PreferencesGroup(
+            title="Como instalar", description=GLib.markup_escape_text(INSTALL_TUTORIAL)
+        )
+        content.append(tutorial)
+
         groups: dict[str, list[core.Category]] = {}
         for cid in pkgs:
             c = core.CATEGORY_BY_ID.get(cid)
@@ -265,6 +292,16 @@ class DotsWindow(Adw.ApplicationWindow):
 class DotsApp(Adw.Application):
     def __init__(self):
         super().__init__(application_id=APP_ID)
+
+    def do_startup(self):
+        Adw.Application.do_startup(self)
+        provider = Gtk.CssProvider()
+        provider.load_from_data(SWITCH_CSS)
+        # PRIORITY_USER (no APPLICATION): libadwaita inyecta su propio CSS de
+        # color de acento por encima de APPLICATION, y lo pisaria.
+        Gtk.StyleContext.add_provider_for_display(
+            Gdk.Display.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_USER
+        )
 
     def do_activate(self):
         win = self.props.active_window or DotsWindow(self)
